@@ -1,29 +1,9 @@
-import { ITheme, IPartialTheme, IThemeColorDefinition, ITypography } from '@fluentui-react-native/theme-types';
+import { Theme, PartialTheme } from '@fluentui-react-native/theme-types';
 import { resolvePartialTheme } from './Theme';
+import { mockTheme } from '@fluentui-react-native/test-tools';
 
-const theme: ITheme = {
-  colors: {
-    background: '#ff0000',
-  } as IThemeColorDefinition,
-  typography: {
-    families: {
-      primary: 'Arial',
-    },
-    sizes: {
-      secondary: 14,
-    },
-    weights: {
-      regular: '400',
-    },
-    variants: {
-      secondaryStandard: {
-        face: 'Arial',
-        size: 14,
-        weight: '400',
-      },
-    },
-  } as ITypography,
-  spacing: { s2: '4px', s1: '8px', m: '16px', l1: '20px', l2: '32px' },
+const theme: Theme = {
+  ...mockTheme,
   components: {
     View: {
       tokens: {
@@ -32,10 +12,9 @@ const theme: ITheme = {
       },
     },
   },
-  host: {},
 };
 
-const partialTheme: IPartialTheme = {
+const partialTheme: PartialTheme = {
   colors: {
     bodySubtext: 'rgb(100,100,100)',
   },
@@ -66,41 +45,17 @@ describe('Theme tests', () => {
 
   test('resolvePartialTheme returns a blend of the partial theme and the full theme', () => {
     const resolved = resolvePartialTheme(theme, partialTheme);
-    expect(resolved).toEqual({
-      colors: ({
-        background: '#ff0000',
-        bodySubtext: 'rgb(100,100,100)',
-      } as unknown) as IThemeColorDefinition,
-      typography: {
-        families: {
-          primary: 'Arial',
+    expect(resolved.colors.bodySubtext).toEqual(partialTheme.colors.bodySubtext);
+    expect(resolved.components).toEqual({
+      View: {
+        tokens: {
+          backgroundColor: 'bodyBackground',
+          fontFamily: 'primary',
         },
-        sizes: {
-          secondary: 14,
-        },
-        weights: {
-          regular: '400',
-        },
-        variants: {
-          secondaryStandard: {
-            face: 'Arial',
-            size: 14,
-            weight: '400',
-          },
-        },
-      } as ITypography,
-      spacing: { s2: '4px', s1: '8px', m: '16px', l1: '20px', l2: '32px' },
-      components: {
-        View: {
-          tokens: {
-            backgroundColor: 'bodyBackground',
-            fontFamily: 'primary',
-          },
-        },
-        Text: {
-          tokens: {
-            backgroundColor: 'cyan',
-          },
+      },
+      Text: {
+        tokens: {
+          backgroundColor: 'cyan',
         },
       },
     });
