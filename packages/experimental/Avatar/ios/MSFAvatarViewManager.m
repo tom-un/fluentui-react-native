@@ -40,9 +40,12 @@ RCT_ENUM_CONVERTER(MSFPresence, (@{
 
 + (MSFAvatarData *)MSFAvatarData:(id)json
 {
+    // [RCTConvert UIImage:] throws an error if we pass it a nil value, so do an extra check
+    UIImage *image = (![json[@"image"] isEqual:[NSNull null]]) ?  [RCTConvert UIImage:json[@"image"]] : nil;
+    
 	return [[MSFAvatarData alloc]initWithPrimaryText:[RCTConvert NSString:json[@"primaryText"]]
                                      secondaryText:[RCTConvert NSString:json[@"secondaryText"]]
-                                             image:[RCTConvert UIImage:json[@"image"]]
+                                             image:image
                                           presence:[RCTConvert MSFPresence:json[@"presence"]]
                                              color:[RCTConvert UIColor:json[@"color"]]];
 }
@@ -51,9 +54,10 @@ RCT_ENUM_CONVERTER(MSFPresence, (@{
 
 @interface RCT_EXTERN_MODULE(MSFAvatarViewManager, RCTViewManager)
 
-RCT_EXPORT_VIEW_PROPERTY(avatarSize, MSFAvatarSize);
-RCT_EXPORT_VIEW_PROPERTY(avatarBackgroundColor, UIColor);
-RCT_EXPORT_VIEW_PROPERTY(customBorderImage, UIImage);
+RCT_REMAP_VIEW_PROPERTY(size, avatarSize, MSFAvatarSize);
+RCT_REMAP_VIEW_PROPERTY(backgroundColor, avatarBackgroundColor, UIColor);
+
+RCT_REMAP_VIEW_PROPERTY(customBorderImageSource, customBorderImage, UIImage);
 
 RCT_REMAP_VIEW_PROPERTY(avatarStyle, style, MSFAvatarStyle)
 

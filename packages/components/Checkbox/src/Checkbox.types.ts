@@ -1,11 +1,10 @@
 import * as React from 'react';
 // import { IPressableProps } from '@fluentui-react-native/pressable';
 import { IPressableState, IFocusable } from '@fluentui-react-native/interactive-hooks';
-import { ViewProps } from 'react-native';
 import { IRenderData } from '@uifabricshared/foundation-composable';
 import { ITextProps } from '@fluentui-react-native/text';
 import { FontTokens, IForegroundColorTokens, IBackgroundColorTokens, IBorderTokens } from '@fluentui-react-native/tokens';
-import { IViewWin32Props } from '@office-iss/react-native-win32';
+import type { IViewProps } from '@fluentui-react-native/adapters';
 
 export const checkboxName = 'Checkbox';
 
@@ -26,7 +25,7 @@ export interface ICheckboxState extends IPressableState {
   boxAtEnd?: boolean;
 }
 
-export interface ICheckboxProps extends ViewProps {
+export interface ICheckboxProps extends IViewProps {
   /**
    * An optional string for the Narrator to read. If not provided, this will be set to the Checkbox label
    */
@@ -70,6 +69,11 @@ export interface ICheckboxProps extends ViewProps {
   onChange?: (isChecked: boolean) => void;
 
   testID?: string;
+
+  /**
+   * Provides a tooltip while hovering over Checkbox component
+   */
+  tooltip?: string;
 }
 
 export interface ICheckboxTokens extends FontTokens, IForegroundColorTokens, IBackgroundColorTokens, IBorderTokens {
@@ -81,8 +85,8 @@ export interface ICheckboxTokens extends FontTokens, IForegroundColorTokens, IBa
 }
 
 export interface ICheckboxSlotProps {
-  root: React.PropsWithRef<IViewWin32Props>;
-  checkbox: ViewProps;
+  root: React.PropsWithRef<IViewProps>;
+  checkbox: IViewProps;
   checkmark: ITextProps;
   content: ITextProps;
 }
